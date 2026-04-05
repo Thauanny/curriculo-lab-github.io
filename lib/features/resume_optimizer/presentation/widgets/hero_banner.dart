@@ -36,7 +36,7 @@ class HeroBanner extends StatelessWidget {
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        'IA generativa · 100% local · Sem envio de dados',
+                        '100% gratuito · Sem envio de dados',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: Colors.white.withValues(alpha: 0.8),
                           fontWeight: FontWeight.w600,

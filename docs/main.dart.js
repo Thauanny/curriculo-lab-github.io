@@ -111245,7 +111245,7 @@ J(a){var s=null,r=B.aM(24)
 return B.bm(s,B.xF(new B.aeM(this)),A.Q,s,s,new B.b3(s,s,s,r,s,A.WL,A.a7),s,s,s,A.TI,s,s,1/0)}}
 B.aeM.prototype={
 $2(a,b){var s,r=null,q=b.b>=700,p=q?A.bB:A.bc,o=q?A.a4:A.a8,n=q?6:0,m=A.I.dB(0.12),l=B.aM(6),k=this.a.c.ok,j=k.Q
-m=B.bm(r,B.as("IA generativa \xb7 100% local \xb7 Sem envio de dados",r,r,r,r,j==null?r:j.hV(A.I.dB(0.8),A.bR),r,r),A.Q,r,r,new B.b3(m,r,r,l,r,r,A.a7),r,r,r,A.Tp,r,r,r)
+m=B.bm(r,B.as("100% gratuito \xb7 Sem envio de dados",r,r,r,r,j==null?r:j.hV(A.I.dB(0.8),A.bR),r,r),A.Q,r,r,new B.b3(m,r,r,l,r,r,A.a7),r,r,r,A.Tp,r,r,r)
 l=k.b
 if(l==null)l=r
 else l=l.axd(A.I,q?38:30,1.15)
