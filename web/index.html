@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Plataforma web para leitura de curriculo, analise ATS e reescrita com IA generativa.">
+
+  <!--
+    Cache versioning — evita que usuários fiquem presos em versões antigas do app.
+    Estes meta tags instruem o navegador a sempre revalidar o index.html com o servidor
+    antes de usar a cópia em cache. Os assets do Flutter (JS/WASM) já possuem hashes
+    únicos por build (gerados automaticamente pelo flutter build web).
+    Para garantir o cache-bust ao fazer deploy: basta incrementar o campo
+    app-version abaixo — navegadores que armazenaram o HTML em cache vão
+    perceber a mudança e buscar o novo index.html.
+  -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="app-version" content="1.0.0">
+
+  <!--
+    Content Security Policy — principais proteções ativas:
+    · 'unsafe-inline' obrigatório: Flutter web (DDC/CanvasKit) injeta scripts inline
+      gerados em build-time; hashes não são viáveis pois mudam a cada build.
+      O ganho real da CSP aqui é bloquear domínios externos fora da allowlist,
+      não scripts inline (que são todos do próprio build Flutter).
+    · 'wasm-unsafe-eval': obrigatório para WebAssembly (Flutter + WebLLM)
+    · https://www.gstatic.com: Flutter CanvasKit renderer carrega de lá
+    · connect-src https:: permite download do modelo e bloqueia HTTP puro
+    · frame-src / object-src 'none': elimina clickjacking e vetores de plugin
+    · worker-src blob:: obrigatório para inferência off-thread do WebLLM
+  -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self';
+             script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://www.gstatic.com https://esm.run https://esm.sh https://cdn.jsdelivr.net https://unpkg.com;
+             worker-src 'self' blob:;
+             connect-src 'self' https:;
+             img-src 'self' data: blob:;
+             style-src 'self' 'unsafe-inline';
+             font-src 'self' data: https://fonts.gstatic.com;
+             frame-src 'none';
+             object-src 'none';">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="revisor_curriculo">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Curriculo Lab</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #F8FAFC; }
+
+    #flutter-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #F8FAFC;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    #flutter-loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .fl-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #6366F1, #8B5CF6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .fl-logo svg { width: 26px; height: 26px; }
+    .fl-title {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #0F172A;
+      letter-spacing: -0.02em;
+    }
+    .fl-spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #E2E8F0;
+      border-top-color: #6366F1;
+      border-radius: 50%;
+      animation: fl-spin 0.75s linear infinite;
+    }
+    .fl-hint {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 13px;
+      color: #94A3B8;
+    }
+    @keyframes fl-spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <!-- Splash loader — hidden once Flutter calls FlutterLoader.didCreateEngineInitializer -->
+  <div id="flutter-loader">
+    <div class="fl-logo">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="fl-title">Currículo Lab</span>
+    <div class="fl-spinner"></div>
+    <span class="fl-hint">Carregando...</span>
+  </div>
+  <!-- ATS Engine: deterministic keyword/section analysis (runs before Flutter) -->
+  <script src="ats_engine.js"></script>
+
+  <!--
+    WebLLM bridge — loaded as an ES module from a local file.
+    crossorigin="anonymous" is required so the browser sends CORS headers,
+    which is a prerequisite for future SRI (integrity="sha384-…") enforcement
+    once the WebLLM bundle is pinned and hashed.
+  -->
+  <script type="module" src="webllm_bridge.js" crossorigin="anonymous"></script>
+
+  <!--
+    ?v= força cache-bust no flutter_bootstrap.js.
+    Incremente junto com app-version a cada deploy para garantir que
+    o navegador busque o bootstrap atualizado mesmo com cache antigo.
+  -->
+  <script src="flutter_bootstrap.js?v=1.0.0" async></script>
+  <script>
+    // Dismiss the splash loader as soon as Flutter signals it has painted its first frame.
+    window.addEventListener('flutter-first-frame', function () {
+      var loader = document.getElementById('flutter-loader');
+      if (loader) { loader.classList.add('hidden'); }
+    });
+  </script>
+</body>
+</html>
