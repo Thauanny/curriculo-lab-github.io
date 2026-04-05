@@ -49,7 +49,7 @@
   <meta http-equiv="Content-Security-Policy"
     content="default-src 'self';
              script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://www.gstatic.com https://esm.run https://esm.sh https://cdn.jsdelivr.net https://unpkg.com;
-             worker-src 'self' blob:;
+             worker-src 'self' blob: https://esm.run https://cdn.jsdelivr.net;
              connect-src 'self' https:;
              img-src 'self' data: blob:;
              style-src 'self' 'unsafe-inline';
@@ -137,6 +137,8 @@
   </div>
   <!-- ATS Engine: deterministic keyword/section analysis (runs before Flutter) -->
   <script src="ats_engine.js"></script>
+  <!-- PDF text extraction via pdf.js (needed to feed ATS + AI from uploaded PDFs) -->
+  <script src="pdf_text_extractor.js"></script>
 
   <!--
     WebLLM bridge — loaded as an ES module from a local file.

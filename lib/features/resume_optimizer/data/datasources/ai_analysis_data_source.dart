@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:revisor_curriculo/core/errors/app_exception.dart';
 import 'package:revisor_curriculo/core/services/webllm_service.dart';
 import 'package:revisor_curriculo/features/resume_optimizer/config/ai_prompts.dart';
@@ -43,15 +44,23 @@ class AiAnalysisDataSource {
       topP: 0.9,
     );
 
-    final jsonString = _extractJSON(response);
-    final data = jsonDecode(jsonString) as Map<String, dynamic>;
+    try {
+      final jsonString = _extractJSON(response);
+      final data = jsonDecode(jsonString) as Map<String, dynamic>;
 
-    // Merge ATS engine scores into the AI response for reliable scoring
-    if (atsResult != null) {
-      _mergeAtsScores(data, atsResult);
+      // Merge ATS engine scores into the AI response for reliable scoring
+      if (atsResult != null) {
+        _mergeAtsScores(data, atsResult);
+      }
+
+      return ResumeAnalysisModel.fromJson(data);
+    } catch (error, stackTrace) {
+      debugPrint('[AiAnalysisDataSource] JSON parsing/model creation error: $error\n$stackTrace');
+      debugPrint('[AiAnalysisDataSource] Raw response from WebLLM: ${response.substring(0, response.length > 500 ? 500 : response.length)}...');
+      throw AppException(
+        'Erro ao processar resposta da IA: $error. Tente novamente.',
+      );
     }
-
-    return ResumeAnalysisModel.fromJson(data);
   }
 
   String _extractResumeText(ResumeReviewRequest request) {
@@ -86,6 +95,7 @@ class AiAnalysisDataSource {
       assessment['keywordAlignmentScore'] = ats.keywordScore;
       assessment['sectionCompletenessScore'] = ats.sectionScore;
       assessment['readabilityScore'] = ats.readabilityScore;
+      assessment['issues'] = ats.issues;
     }
 
     final compatibility = data['jobCompatibility'];

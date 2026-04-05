@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:printing/printing.dart';
 
 import '../services/pdf_generator.dart';
@@ -37,7 +36,7 @@ class _ResumeEditorSectionState extends State<ResumeEditorSection>
   void initState() {
     super.initState();
     _editController = TextEditingController(text: widget.markdown);
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _editController.addListener(_onTextChanged);
   }
 
@@ -135,7 +134,6 @@ class _ResumeEditorSectionState extends State<ResumeEditorSection>
                   labelStyle: theme.textTheme.titleSmall?.copyWith(fontSize: 13),
                   tabs: const [
                     Tab(icon: Icon(Icons.edit_note_rounded, size: 18), text: 'Editar'),
-                    Tab(icon: Icon(Icons.visibility_rounded, size: 18), text: 'Pré-visualizar'),
                     Tab(icon: Icon(Icons.picture_as_pdf_rounded, size: 18), text: 'PDF'),
                     Tab(icon: Icon(Icons.menu_book_outlined, size: 18), text: 'Guia'),
                   ],
@@ -169,38 +167,7 @@ class _ResumeEditorSectionState extends State<ResumeEditorSection>
                       ),
                     ),
 
-                    // ── Tab 2: Markdown preview
-                    ListenableBuilder(
-                      listenable: _editController,
-                      builder: (context, _) => Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Markdown(
-                          data: _editController.text,
-                          selectable: true,
-                          shrinkWrap: false,
-                          styleSheet: MarkdownStyleSheet(
-                            h1: theme.textTheme.headlineSmall?.copyWith(
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.slate900,
-                            ),
-                            h2: theme.textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.slate900,
-                            ),
-                            h3: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.slate500,
-                            ),
-                            p: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
-                            listBullet: theme.textTheme.bodyMedium?.copyWith(
-                              color: AppColors.primary,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    // ── Tab 3: PDF preview
+                    // ── Tab 2: PDF preview
                     widget.pdfBytes != null
                         ? PdfResumeViewer(
                             pdfBytes: widget.pdfBytes!,
@@ -220,7 +187,7 @@ class _ResumeEditorSectionState extends State<ResumeEditorSection>
                             ),
                           ),
 
-                    // ── Tab 4: Section guide
+                    // ── Tab 3: Section guide
                     SingleChildScrollView(
                       padding: const EdgeInsets.all(16),
                       child: Column(
@@ -290,7 +257,6 @@ class _ResumeEditorSectionState extends State<ResumeEditorSection>
           ),
         ),
         const SizedBox(height: 16),
-
         // ── Action buttons ────────────────────────────────────────
         Row(
           children: [

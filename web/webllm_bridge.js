@@ -31,15 +31,20 @@ window.initWebLLMEngine = async function(modelId) {
   }
 
   try {
-    logWebLLM('INFO', 'Calling webllm.CreateMLCEngine...');
-    mlcEngine = await webllm.CreateMLCEngine(modelId, {
+    logWebLLM('INFO', 'Creating Web Worker engine (UI stays responsive)...');
+    const worker = new Worker(
+      new URL('./webllm_worker.js', import.meta.url),
+      { type: 'module' }
+    );
+
+    mlcEngine = await webllm.CreateWebWorkerMLCEngine(worker, modelId, {
       initProgressCallback: function(report) {
         logWebLLM('DEBUG', 'Loading: ' + report.text);
         window._webllmProgress = report.text;
       }
     });
 
-    logWebLLM('INFO', 'Engine created and model loaded');
+    logWebLLM('INFO', 'Worker engine created and model loaded');
     return true;
   } catch (error) {
     logWebLLM('ERROR', 'Init failed', { error: error.message, stack: error.stack });

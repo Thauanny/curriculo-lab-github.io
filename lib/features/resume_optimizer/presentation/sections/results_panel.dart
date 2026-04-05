@@ -30,8 +30,8 @@ class ResultsPanel extends StatelessWidget {
         subtitle: 'Analisando currículo, mapeando compatibilidade e preparando reescrita.',
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            ClipRRect(
+          children: [
+            const ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(6)),
               child: LinearProgressIndicator(
                 minHeight: 6,
@@ -39,10 +39,10 @@ class ResultsPanel extends StatelessWidget {
                 backgroundColor: AppColors.primaryLight,
               ),
             ),
-            SizedBox(height: 20),
-            ProcessStep(icon: Icons.document_scanner_outlined, label: 'Leitura e extração do currículo'),
-            ProcessStep(icon: Icons.compare_arrows_rounded, label: 'Mapeamento ATS e compatibilidade com a vaga'),
-            ProcessStep(icon: Icons.edit_note_rounded, label: 'Reescrita otimizada do currículo'),
+            const SizedBox(height: 14),
+            const ProcessStep(icon: Icons.document_scanner_outlined, label: 'Leitura e extração do currículo'),
+            const ProcessStep(icon: Icons.compare_arrows_rounded, label: 'Mapeamento ATS e compatibilidade com a vaga'),
+            const ProcessStep(icon: Icons.edit_note_rounded, label: 'Reescrita otimizada do currículo'),
           ],
         ),
       );
@@ -171,6 +171,7 @@ class ResultsPanel extends StatelessWidget {
               Wrap(
                 spacing: 14,
                 runSpacing: 14,
+                alignment: WrapAlignment.center,
                 children: [
                   MetricBadge(
                     label: 'Leitura ATS',
@@ -188,6 +189,7 @@ class ResultsPanel extends StatelessWidget {
               Wrap(
                 spacing: 14,
                 runSpacing: 14,
+                alignment: WrapAlignment.center,
                 children: [
                   MetricBadge(
                     label: 'Completude',
@@ -383,6 +385,7 @@ class ResultsPanel extends StatelessWidget {
         title: 'Recriando currículo...',
         subtitle: 'A IA está aplicando as correções de ATS e gerando o PDF.',
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(6)),
@@ -392,7 +395,7 @@ class ResultsPanel extends StatelessWidget {
                 backgroundColor: AppColors.primaryLight,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
             const ProcessStep(icon: Icons.auto_fix_high_rounded, label: 'Aplicando correções de keywords e seções'),
             const ProcessStep(icon: Icons.description_outlined, label: 'Gerando versão otimizada em PDF'),
           ],

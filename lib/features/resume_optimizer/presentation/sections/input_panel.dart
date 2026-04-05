@@ -214,7 +214,34 @@ class InputPanel extends ConsumerWidget {
           ],
 
           const SizedBox(height: 28),
-
+          // ── Freeze warning ────────────────────────────────────────────
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFF7ED),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: const Color(0xFFFED7AA)),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.warning_amber_rounded, size: 16, color: AppColors.amber),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'A IA roda localmente no seu navegador — a tela pode travar levemente durante o processamento. '
+                    'Tempo estimado: 1 a 3 minutos dependendo do dispositivo.',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: const Color(0xFF92400E),
+                      height: 1.4,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
           // ── Submit ──────────────────────────────────────────────────
           SizedBox(
             width: double.infinity,

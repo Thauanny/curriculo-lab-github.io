@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:revisor_curriculo/core/errors/app_exception.dart';
 import 'package:revisor_curriculo/core/services/resume_document_picker.dart';
@@ -124,7 +125,8 @@ class ResumeOptimizerController extends StateNotifier<ResumeOptimizerState> {
         errorMessage: error.message,
         clearAnalysis: true,
       );
-    } catch (_) {
+    } catch (error, stackTrace) {
+      debugPrint('[ResumeOptimizer] Analyze error: $error\n$stackTrace');
       state = state.copyWith(
         status: ResumeOptimizerStatus.failure,
         errorMessage:
