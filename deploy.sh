@@ -3,7 +3,7 @@
 set -e
 
 echo "🔨 Building Flutter web application..."
-flutter build web --release
+flutter build web --release --base-href "/curriculo-lab-github.io/"
 
 echo ""
 echo "📦 Copying build to docs folder..."
@@ -24,4 +24,4 @@ git push
 
 echo ""
 echo "✅ Deployment complete!"
-echo "🌐 Visit: https://thauanny.github.io"
+echo "🌐 Visit: https://thauanny.github.io/curriculo-lab-github.io/
